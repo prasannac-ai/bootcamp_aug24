@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.connectritam.fooddonation.userservice.dto.UsersDTO;
+import com.connectritam.fooddonation.userservice.mapper.UserMapper;
 import com.connectritam.fooddonation.userservice.model.Users;
 import com.connectritam.fooddonation.userservice.service.UserService;
 
@@ -35,10 +36,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Users>> getUsers() {
-
-        List<Users> userList = userService.getAllUsers();
-
+    public ResponseEntity<List<UsersDTO>> getUsers() {
+        List<UsersDTO> userList = userService.getAllUsers();
         return ResponseEntity.ok(userList);
     }
 
@@ -56,24 +55,26 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Users> createUser(@RequestBody Users user) {
+    public ResponseEntity<UsersDTO> createUser(@RequestBody UsersDTO userDTO) {
 
-        Users createdUser = userService.createUser(user);
+        Users createdUser = userService.createUser(userDTO);
+        UsersDTO userDTOUpdated = UserMapper.INSTANCE.toDTO(createdUser);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(createdUser.getId()).toUri();
-        return ResponseEntity.created(location).body(createdUser);
+        return ResponseEntity.created(location).body(userDTOUpdated);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Users> updateUser(@PathVariable UUID id, @RequestBody Users userDetails) {
-        Users updatedUser = null;
+    public ResponseEntity<UsersDTO> updateUser(@PathVariable UUID id, @RequestBody UsersDTO userDetailsDTO) {
         try {
-            updatedUser = userService.updateUser(id, userDetails);
+            Users updatedUser = userService.updateUser(id, userDetailsDTO);
 
-        } catch (Exception e) {
+            UsersDTO userDTOUpdated = UserMapper.INSTANCE.toDTO(updatedUser);
+
+            return ResponseEntity.ok(userDTOUpdated);
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/{id}")
@@ -81,7 +82,7 @@ public class UserController {
         try {
             userService.deleteUser(id);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.noContent().build();
     }

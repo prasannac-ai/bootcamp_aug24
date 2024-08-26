@@ -1,20 +1,18 @@
 package com.connectritam.fooddonation.userservice.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Optional;
 import java.util.UUID;
-
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.connectritam.fooddonation.userservice.model.Users;
 import com.connectritam.fooddonation.userservice.repository.UserRepository;
@@ -41,20 +39,26 @@ class UserServiceTest {
         // Assert that the result is empty
         assertFalse(foundUser.isPresent());
 
+        // Verify that the method was called with the correct parameters
+        verify(userRepository).findById(id);
     }
 
     @Test
     void getUserById_shouldReturnUser() {
         UUID id = UUID.randomUUID();
         Users user = new Users();
-        user.setName("Kiran");
+        user.setName("prasanna");
         user.setId(id);
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
         Optional<Users> result = userService.getUserById(id);
         assertTrue(result.isPresent());
         assertEquals(id, result.get().getId());
-        assertEquals("Kiran", result.get().getName());
+        assertEquals("prasanna", result.get().getName());
+
         assertTrue(result.isPresent());
     }
+
+
+    
 
 }

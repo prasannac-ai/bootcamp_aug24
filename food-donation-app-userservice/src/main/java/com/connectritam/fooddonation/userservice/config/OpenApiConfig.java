@@ -10,7 +10,7 @@ import org.springdoc.core.models.GroupedOpenApi;
 public class OpenApiConfig {
 
     @Bean
-    public OpenAPI customOpenAPI() {
+    OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
                         .title("Food Donation App API")
@@ -19,10 +19,18 @@ public class OpenApiConfig {
     }
 
     @Bean
-    public GroupedOpenApi userApi() {
+    GroupedOpenApi userApi() {
         return GroupedOpenApi.builder()
-                .group("users")
+                .group("users-v1")
                 .pathsToMatch("/api/v1/users/**")
+                .build();
+    }
+
+    @Bean
+    GroupedOpenApi userV2Api() {
+        return GroupedOpenApi.builder()
+                .group("users-v2")
+                .pathsToMatch("/api/v2/users/**")
                 .build();
     }
 }
