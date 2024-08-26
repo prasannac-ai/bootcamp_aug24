@@ -12,7 +12,7 @@ OR
 mvn spring-boot:run  
 
 swagger 
-http://localhost:8080/swagger-ui/index.htm
+http://localhost:8080/swagger-ui/index.html
 
 Debug
 mvn spring-boot:run -Dspring-boot.run.jvmArguments=“-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
