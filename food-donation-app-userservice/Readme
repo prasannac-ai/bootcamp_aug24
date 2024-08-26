@@ -1,0 +1,18 @@
+Very basic introduction to start a spring boot application 
+GET,POST,PUT and DELETE methods
+OpenAPi documentation - Swagger UI
+POSTMAN build collection using OpenAPI Docs and Test endpoints. 
+
+Build 
+mvn clean install -Dmaven.test.skip=true    
+
+RUN
+java -jar ./target/food-donation-app-userservice-0.0.1-SNAPSHOT.jar
+OR 
+mvn spring-boot:run  
+
+swagger 
+http://localhost:8080/swagger-ui/index.htm
+
+Debug
+mvn spring-boot:run -Dspring-boot.run.jvmArguments=“-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
