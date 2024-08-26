@@ -4,7 +4,7 @@ This project is part of a system design bootcamp and is built using the followin
 
 	•	Java 17
 	•	Spring Boot
-	•	Apache Maven 3.9.8
+	•	Apache Maven
 	•	Nginx
 	•	Docker
 	•	Brave & Zipkin
