@@ -1,4 +1,4 @@
-package com.connectritam.fooddonation.util;
+package com.connectritam.fooddonation.userservice.util;
 
 import org.junit.jupiter.api.Test;
 
