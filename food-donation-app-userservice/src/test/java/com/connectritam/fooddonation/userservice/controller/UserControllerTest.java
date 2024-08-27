@@ -28,7 +28,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.connectritam.fooddonation.userservice.model.Users;
 import com.connectritam.fooddonation.userservice.service.UserService;
 
-//TODO FIXIT
 @WebMvcTest(UserController.class)
 class UserControllerTest {
 
