@@ -13,7 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.connectritam.fooddonation.userservice.dto.CreateUsersDTO;
 import com.connectritam.fooddonation.userservice.dto.UsersDTO;
+import com.connectritam.fooddonation.userservice.exception.ErrorKey;
+import com.connectritam.fooddonation.userservice.exception.ResourceNotFoundException;
 import com.connectritam.fooddonation.userservice.mapper.UserMapper;
 import com.connectritam.fooddonation.userservice.model.Users;
 import com.connectritam.fooddonation.userservice.repository.UserRepository;
@@ -63,22 +66,29 @@ public class UserService {
         return userDTO;
     }
 
-    public Optional<Users> getUserById(UUID id) {
-        return userRepository.findById(id);
+    public Users getUserById(UUID id) {
+
+        Optional<Users> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+        } else {
+            throw new ResourceNotFoundException(ErrorKey.USER_NOT_FOUND);
+
+        }
     }
 
-    public Users createUser(UsersDTO userDTO) {
+    public Users createUser(CreateUsersDTO userDTO) {
         Users user = UserMapper.INSTANCE.toFullEntity(userDTO);
         return userRepository.save(user);
     }
 
-    public Users updateUser(UUID id, UsersDTO userDetails) {
+    public Users updateUser(UUID id, CreateUsersDTO userDetails) {
         Optional<Users> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             Users user = userOptional.get();
             user.setName(userDetails.getName());
             user.setEmail(userDetails.getEmail());
-            user.setPassword(userDetails.getPassword());
+            user.setPassword(userDetails.getPassword()); // FIXIT
             user.setRole(userDetails.getRole());
             user.setMobile(userDetails.getMobile());
             user.setAddress(userDetails.getAddress());
@@ -86,7 +96,7 @@ public class UserService {
             user.setLongitude(userDetails.getLongitude());
             return userRepository.save(user);
         } else {
-            throw new RuntimeException("User not found with id " + id);
+            throw new ResourceNotFoundException("User not found with id " + id);
         }
     }
 

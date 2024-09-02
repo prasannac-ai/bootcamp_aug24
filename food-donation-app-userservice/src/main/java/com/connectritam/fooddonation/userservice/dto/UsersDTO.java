@@ -20,16 +20,6 @@ public class UsersDTO {
 
     private Double longitude;
 
-    private String password;
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public UUID getId() {
         return id;
     }
