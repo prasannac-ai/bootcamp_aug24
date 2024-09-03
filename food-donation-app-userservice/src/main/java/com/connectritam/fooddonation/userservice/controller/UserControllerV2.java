@@ -61,13 +61,18 @@ public class UserControllerV2 {
         try {
             responseBody = new ObjectMapper().writeValueAsBytes(userDTO);
         } catch (JsonProcessingException e) {
-            // NOTE add your own Exception as a best practice Example :
+            // STUDENT add your own Exception as a best practice Example :
             // JsonSerializationException and capture that in UserServicesException
             throw new RuntimeException(ErrorKey.JSON_SER_ERR, e);
         }
 
         // Generate ETag
         String eTag = HashGenerator.generateETag(responseBody);
+
+        // Check if ETag matches
+        if (eTag.equals(ifNoneMatch)) {
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).eTag(eTag).build();
+        }
 
         return ResponseEntity.ok().eTag(eTag).body(userDTO);
 

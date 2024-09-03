@@ -43,7 +43,7 @@ public class AuthControllerV02 {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
+    @Autowired // STUDENT to review @Autowired
     JwtUtil jwtUtil;
 
     @Autowired
@@ -58,7 +58,7 @@ public class AuthControllerV02 {
         CreateUsersDTO userDTOUpdated = UserMapper.INSTANCE.toCreateUsersDTO(createdUser);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(createdUser.getId()).toUri();
-        return ResponseEntity.created(location).body(userDTOUpdated); // NOTE only to demonstrate the hashed password.
+        return ResponseEntity.created(location).body(userDTOUpdated); 
     }
 
     @PostMapping("/signin")
@@ -72,6 +72,7 @@ public class AuthControllerV02 {
             jwt = jwtUtil.generateToken(userDetails);
 
         } catch (BadCredentialsException e) {
+            // STUDENT to implement AuthenticationException
             throw new RuntimeException("Incorrect username or password");
         } catch (ExpiredJwtException e) {
             logger.error("Token validation failed for user: " + user.getEmail() + ". Generating new token.", e);
