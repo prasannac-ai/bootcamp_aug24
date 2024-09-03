@@ -1,0 +1,68 @@
+version: '3.5'
+
+services:
+  db-announcement:
+    container_name: db_announcement_container
+    image: postgis/postgis:14-3.3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: welcome
+      POSTGRES_DB: food_announcement_db
+      PGDATA: /data/postgres
+    volumes:
+      - db-announcement:/data/postgres
+    ports:
+      - "5434:5432"
+    networks:
+      - common_network
+    restart: unless-stopped
+
+  db-request:
+    container_name: db_request_container
+    image: postgis/postgis:14-3.3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: welcome
+      POSTGRES_DB: food_request_db
+      PGDATA: /data/postgres
+    volumes:
+      - db-request:/data/postgres
+    ports:
+      - "5435:5432"
+    networks:
+      - common_network
+    restart: unless-stopped
+
+  food-announcement-service:
+    build: ./food-donation-app-donate
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-announcement:5432/food_announcement_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: welcome
+    networks:
+      - common_network
+    depends_on:
+      - db-announcement
+
+  food-request-service:
+    build: ./food-donation-app-request
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-request:5432/food_request_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: welcome
+    networks:
+      - common_network
+    depends_on:
+      - db-request
+
+networks:
+  common_network:
+    driver: bridge
+
+volumes:
+  db-announcement:
+  db-request:
