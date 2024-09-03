@@ -1,6 +1,22 @@
 version: '3.5'
 
 services:
+  db-user:
+    container_name: db_userservice_container
+    image: postgis/postgis:14-3.3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: welcome
+      POSTGRES_DB: user_service_db
+      PGDATA: /data/postgres
+    volumes:
+      - db-user:/data/postgres
+    ports:
+      - "5433:5432"
+    networks:
+      - common_network
+    restart: unless-stopped
+
   db-announcement:
     container_name: db_announcement_container
     image: postgis/postgis:14-3.3
@@ -17,10 +33,40 @@ services:
       - common_network
     restart: unless-stopped
 
+  db-request:
+    container_name: db_request_container
+    image: postgis/postgis:14-3.3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: welcome
+      POSTGRES_DB: food_request_db
+      PGDATA: /data/postgres
+    volumes:
+      - db-request:/data/postgres
+    ports:
+      - "5435:5432"
+    networks:
+      - common_network
+    restart: unless-stopped
+
+  user-service:
+    build: ./food-donation-app-userservice
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-user:5432/user_service_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: welcome
+    networks:
+      - common_network
+    depends_on:
+      - db-user
+
   food-announcement-service:
     build: ./food-donation-app-donate
     ports:
       - "8081:8080"
+      - "5005:5005"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db-announcement:5432/food_announcement_db
       SPRING_DATASOURCE_USERNAME: postgres
@@ -30,9 +76,26 @@ services:
     depends_on:
       - db-announcement
 
+  food-request-service:
+    build: ./food-donation-app-request
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-request:5432/food_request_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: welcome
+    networks:
+      - common_network
+    depends_on:
+      - db-request
+
 networks:
   common_network:
     driver: bridge
 
 volumes:
+  db-user:
   db-announcement:
+  db-request:
+
+
