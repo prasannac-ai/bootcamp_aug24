@@ -2,7 +2,6 @@ package com.connectritam.fooddonation.userservice.controller;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.slf4j.Logger;

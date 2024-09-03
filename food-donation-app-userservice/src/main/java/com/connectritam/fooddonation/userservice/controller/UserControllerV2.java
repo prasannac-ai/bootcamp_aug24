@@ -69,11 +69,6 @@ public class UserControllerV2 {
         // Generate ETag
         String eTag = HashGenerator.generateETag(responseBody);
 
-        // Check if ETag matches
-        if (eTag.equals(ifNoneMatch)) {
-            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).eTag(eTag).build();
-        }
-
         return ResponseEntity.ok().eTag(eTag).body(userDTO);
 
     }
