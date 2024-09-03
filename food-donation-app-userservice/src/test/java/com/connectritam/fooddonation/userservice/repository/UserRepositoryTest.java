@@ -56,4 +56,9 @@ public class UserRepositoryTest {
         assertThat(foundUser).isPresent();
         assertThat(foundUser.get().getName()).isEqualTo("John Doe");
     }
+
+    @Test
+    void testFindUserById_whenUserNotFound() {
+
+    }
 }
