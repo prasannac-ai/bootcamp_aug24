@@ -1,7 +1,5 @@
 package com.connectritam.fooddonation.userservice.dto;
 
-import java.util.UUID;
-
 public class CreateUsersDTO extends UsersDTO {
 
     private String password;

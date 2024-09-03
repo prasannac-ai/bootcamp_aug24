@@ -1,4 +1,7 @@
- 
+Very basic introduction to start a spring boot application 
+GET,POST,PUT and DELETE methods
+OpenAPi documentation - Swagger UI
+POSTMAN build collection using OpenAPI Docs and Test endpoints. 
 
 Build 
 mvn clean install -Dmaven.test.skip=true    
@@ -6,7 +9,9 @@ mvn clean install -Dmaven.test.skip=true
 RUN
 java -jar ./target/food-donation-app-userservice-0.0.1-SNAPSHOT.jar
 OR 
-mvn spring-boot:run  
+mvn spring-boot:run -DskipTests=true  
+
+
 
 swagger 
 http://localhost:8080/swagger-ui/index.htm
@@ -18,14 +23,23 @@ mvn spring-boot:run -Dspring-boot.run.jvmArguments=“-agentlib:jdwp=transport=d
 
 
 
-application.properties
-spring.application.name=food-donation-app-userservice
-spring.datasource.url=jdbc:postgresql://localhost:5433/user_service_db
-spring.datasource.username=postgres
-spring.datasource.password=welcome
-spring.datasource.driver-class-name=org.postgresql.Driver
-spring.jpa.hibernate.ddl-auto=update
-spring.sql.init.schema-locations=classpath:schema.sql
-spring.sql.init.mode=always
-logging.level.org.hibernate.SQL=DEBUG
-spring.jpa.show-sql=true
+
+
+
+Docker clean up commands -only for training purpose 
+
+stop all containers
+docker stop $(docker ps -q)
+
+remove all images
+docker rmi -f $(docker images -q)
+
+remove all docker volumes
+docker volume prune -f
+
+remove all docker networks
+docker network prune -f
+
+docker system prune --all --volumes -f
+all cleanup
+

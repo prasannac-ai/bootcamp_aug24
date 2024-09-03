@@ -72,10 +72,12 @@ public class UserService {
         if (userOptional.isPresent()) {
             return userOptional.get();
         } else {
-            throw new ResourceNotFoundException(ErrorKey.USER_NOT_FOUND);
+                        throw new ResourceNotFoundException(ErrorKey.USER_NOT_FOUND);
 
         }
     }
+
+    
 
     public Users createUser(CreateUsersDTO userDTO) {
         Users user = UserMapper.INSTANCE.toFullEntity(userDTO);
@@ -88,7 +90,7 @@ public class UserService {
             Users user = userOptional.get();
             user.setName(userDetails.getName());
             user.setEmail(userDetails.getEmail());
-            user.setPassword(userDetails.getPassword()); // FIXIT
+            user.setPassword(userDetails.getPassword());
             user.setRole(userDetails.getRole());
             user.setMobile(userDetails.getMobile());
             user.setAddress(userDetails.getAddress());

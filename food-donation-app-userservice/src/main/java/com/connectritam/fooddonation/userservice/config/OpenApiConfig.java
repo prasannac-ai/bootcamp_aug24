@@ -33,4 +33,20 @@ public class OpenApiConfig {
                 .pathsToMatch("/api/v2/users/**")
                 .build();
     }
+
+    @Bean
+    GroupedOpenApi authApi() {
+        return GroupedOpenApi.builder()
+                .group("auth0.1")
+                .pathsToMatch("/api/v0.1/auth/**")
+                .build();
+    }
+
+    @Bean
+    GroupedOpenApi auth02Api() {
+        return GroupedOpenApi.builder()
+                .group("auth0.2")
+                .pathsToMatch("/api/v0.2/auth/**")
+                .build();
+    }
 }
