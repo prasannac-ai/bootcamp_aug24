@@ -17,18 +17,6 @@ public class DonationProducer {
 
     public void sendMessage(String donation) {
 
-        try {
-
-            // Donation is created successfully, it is not a concern, if the notification
-            // fails.
-            Map<String, Object> message = new HashMap<>();
-            message.put("donationId", donation);
-            kafkaTemplate.send(TOPIC, message);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
 }
