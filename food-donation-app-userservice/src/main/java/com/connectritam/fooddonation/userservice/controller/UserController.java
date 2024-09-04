@@ -45,6 +45,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<UsersDTO>> getUsers() {
         List<UsersDTO> userList = userService.getAllUsers();
         return ResponseEntity.ok(userList);

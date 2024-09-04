@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -41,6 +42,7 @@ public class UserControllerV2 {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<UsersDTO>> getUsers(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "name") String sortField,
             @RequestParam(defaultValue = "asc") String sortDirection) {
