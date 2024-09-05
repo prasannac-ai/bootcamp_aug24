@@ -20,8 +20,8 @@ public class Notifications {
     private String status;
 
     private String role;
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public UUID getId() {
         return id;
