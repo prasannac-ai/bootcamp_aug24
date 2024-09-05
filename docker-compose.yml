@@ -66,7 +66,6 @@ services:
     build: ./food-donation-app-donate
     ports:
       - "8081:8080"
-      - "5005:5005"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db-announcement:5432/food_announcement_db
       SPRING_DATASOURCE_USERNAME: postgres
@@ -133,6 +132,18 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - user-service
+      - food-announcement-service
+      - food-request-service
+      - food-matching-service
+    networks:
+      - common_network
 
 networks:
   common_network:
