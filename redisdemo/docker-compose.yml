@@ -1,0 +1,68 @@
+version: '3.5'
+
+services:
+  db-ratings:
+    container_name: ratings_container
+    image: postgis/postgis:14-3.3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: welcome
+      POSTGRES_DB: ratings_db
+      PGDATA: /data/postgres
+    volumes:
+      - db-ratings:/data/postgres
+    ports:
+      - "5439:5432"
+    networks:
+      - common_network
+    restart: unless-stopped
+
+  rating-service:
+    build: .
+    ports:
+      - "8088:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-ratings:5432/ratings_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: welcome
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans # Use Zipkin service name
+      MANAGEMENT_TRACING_SAMPLING_PROBABILITY: 1.0 # 100% sampling
+    networks:
+      - common_network
+    depends_on:
+      - db-ratings
+      - redis
+      - zipkin
+
+  redis:
+    container_name: redis_container
+    image: redis:7
+    ports:
+      - "6379:6379"
+    command: [ "redis-server", "--bind", "0.0.0.0" ]
+    networks:
+      - common_network
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+
+  zipkin:
+    container_name: zipkin_container
+    image: openzipkin/zipkin:2.24
+    environment:
+      - STORAGE_TYPE=mem
+    ports:
+      - "9411:9411"
+    networks:
+      - common_network
+    restart: unless-stopped
+
+networks:
+  common_network:
+    driver: bridge
+
+volumes:
+  db-ratings:
+  redis-data:

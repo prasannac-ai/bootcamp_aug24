@@ -145,6 +145,17 @@ services:
     networks:
       - common_network
 
+  zipkin:
+    container_name: zipkin_container
+    image: openzipkin/zipkin:2.24
+    environment:
+      - STORAGE_TYPE=mem
+    ports:
+      - "9411:9411"
+    networks:
+      - common_network
+    restart: unless-stopped
+
 networks:
   common_network:
     driver: bridge

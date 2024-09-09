@@ -1,30 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="LOG_FILE" value="food_announcement.log" />
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- Property to define the pattern of the log entries -->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} [%X{traceId},%X{spanId}] - %msg%n" />
+    <!-- Property to define log file location -->
+    <property name="LOG_PATH" value="logs" />
+    <!-- Property to define the name of the log file -->
+    <property name="LOG_FILE" value="${LOG_PATH}/donate.log" />
+
+    <!-- Console Appender for writing logs to the console -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-               <pattern>%d{yyyy-MM-dd HH:mm:ss} - %X{traceId} %X{spanId} %msg%n</pattern>
+            <pattern>${LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
+    <!-- File Appender for writing logs to a file -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_FILE}</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <!-- Roll over daily -->
+            <fileNamePattern>${LOG_PATH}/application-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- Keep 30 days worth of history -->
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
-             <pattern>%d{yyyy-MM-dd HH:mm} [%thread] %-5level %logger{36} - %X{traceId} %X{spanId} %msg%n</pattern>
+            <pattern>${LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
-    <logger name="com.connectritam.foodannouncement" level="DEBUG" additivity="false">
-        <appender-ref ref="FILE" />
+    <!-- Actuator and Micrometer specific logging for tracing -->
+    <appender name="BRAVE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} [%X{traceId},%X{spanId}] - %msg%n%ex</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Logger for Micrometer/Brave tracing -->
+    <logger name="io.micrometer.tracing" level="DEBUG" additivity="false">
+        <appender-ref ref="BRAVE" />
     </logger>
 
+    <!-- Root logger configuration -->
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE" />
     </root>
+
 </configuration>

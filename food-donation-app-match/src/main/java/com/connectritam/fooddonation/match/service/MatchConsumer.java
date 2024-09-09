@@ -43,6 +43,8 @@ public class MatchConsumer {
                                         .findByAnnouncement(
                                                         UUID.fromString(donationMessage.get("donationId").toString()));
 
+                        logger.info("Donation Received ");
+
                         logger.info("Donation Received {} ",
                                         UUID.fromString(donationMessage.get("donationId").toString()).toString());
 
