@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.redisdemo.redisdemo.model.DonorsRating;
 
 public interface DonorsRatingRepository extends JpaRepository<DonorsRating, UUID> {
+    
 
 }

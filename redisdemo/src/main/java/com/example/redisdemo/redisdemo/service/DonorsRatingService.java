@@ -35,9 +35,9 @@ public class DonorsRatingService {
         Span newSpan = tracer.nextSpan().name("saveDonorRating").start();
         try (Tracer.SpanInScope ws = tracer.withSpanInScope(newSpan)) {
 
-            logger.debug("Entering saveDonorRating method");
-            logger.error("add to db");
-            logger.debug("After adding to db");
+            logger.info("Entering saveDonorRating method");
+            logger.info("add to db");
+            logger.info("After adding to db");
             donorsRating.setId(UUID.randomUUID());
             savedRating = donorsRepository.save(donorsRating);
         } finally {
@@ -49,7 +49,15 @@ public class DonorsRatingService {
     @Cacheable(value = "donorrating", key = "#id")
     public DonorsRating getDonorRatingById(UUID id) {
 
-        logger.error("from db");
+        try {
+            // Induce delay and test the cache
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+
+            logger.error("Thread interrupted", e);
+        }
+
+        logger.info("from db");
         return donorsRepository.findById(id).get();
     }
 
@@ -58,7 +66,13 @@ public class DonorsRatingService {
         donorsRepository.deleteById(id);
     }
 
+    @Cacheable(value = "donorrating", key = "'findAll'")
     public List<DonorsRating> findAll() {
+        logger.info("Fetching all donors ratings from db");
         return donorsRepository.findAll();
+
+   
     }
+
+
 }

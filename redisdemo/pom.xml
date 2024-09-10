@@ -58,12 +58,14 @@
     </dependency>
 
 
-	    <!-- Spring Boot Starter Data Redis -->
+	<!-- Spring Boot Starter Data Redis -->
 
 	<dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-redis</artifactId>
     </dependency>
+
+	<!-- Distributed Tracing and monitoring -->
    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>

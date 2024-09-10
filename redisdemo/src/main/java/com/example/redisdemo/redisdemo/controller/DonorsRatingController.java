@@ -34,12 +34,16 @@ public class DonorsRatingController {
     @GetMapping("/{id}")
     public ResponseEntity<DonorsRating> get(@PathVariable UUID id) {
 
+        logger.info("Get donors rating ");
+
         return ResponseEntity.ok(donorsRatingService.getDonorRatingById(id));
 
     }
 
     @PostMapping
-    public ResponseEntity<DonorsRating> postMethodName(@RequestBody DonorsRating entity) {
+    public ResponseEntity<DonorsRating> createDonorRating(@RequestBody DonorsRating entity) {
+
+        logger.info("Entering createDonorRating method");
         donorsRatingService.saveDonorRating(entity);
 
         return ResponseEntity.noContent().build();
@@ -61,7 +65,7 @@ public class DonorsRatingController {
     @DeleteMapping("/flush")
     public String flushAllKeys() {
         redisTemplate.getConnectionFactory().getConnection().flushAll();
-        logger.info("Redis cache cleared on application startup.");
+        logger.info("Redis cache cleared.");
 
         return "All cache keys have been flushed!";
     }
